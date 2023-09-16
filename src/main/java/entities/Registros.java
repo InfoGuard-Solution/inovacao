@@ -1,47 +1,67 @@
 package entities;
 
-import javax.swing.*;
-import java.util.concurrent.ThreadLocalRandom;
+import inovacao.Consulta;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
 
 public class Registros {
 
-    public Integer CpuTemp(){
+    Consulta consulta = new Consulta();
 
-        Integer temperatura = ThreadLocalRandom.current().nextInt(100);
+    public String data() {
 
-        if (temperatura > 80) {
-            //JOptionPane.showMessageDialog(null, String.format("Temperatura da CPU muito alta %d", temperatura));
-        }
-        return  temperatura;
+
+        DateTimeFormatter formatadorDataHora = DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm:ss");
+
+        LocalDateTime hora = consulta.tempo();
+
+        return formatadorDataHora.format(hora);
     }
 
-    public Integer CpuFrequencia(){
+    public Integer cpuTemp() {
 
-        Integer frequencia = ThreadLocalRandom.current().nextInt(100);
+        // primeiro valor da lista vindo do banco
+        Integer temperatura = consulta.dados().get(0);
 
-        if (frequencia > 90) {
-          //  JOptionPane.showMessageDialog(null, String.format("Frequencia da CPU muito alta %d", frequencia));
-        }
-        return  frequencia;
+        return temperatura;
     }
 
-    public Integer GpuTemp(){
+    public Integer cpuFrequencia() {
 
-        Integer temperatura = ThreadLocalRandom.current().nextInt(100);
+        // pegamos o segundo valor da lista o qual se remete a frequencia
+        Integer frequencia = consulta.dados().get(1);
 
-        if (temperatura > 80) {
-          //  JOptionPane.showMessageDialog(null, String.format("Temperatura da GPU muito alta %d", temperatura));
-        }
-        return  temperatura;
+
+        return frequencia;
     }
 
-    public Integer GpuFrequencia(){
+    public Integer gpuTemp() {
 
-        Integer frequencia = ThreadLocalRandom.current().nextInt(100);
+        Integer temperatura = consulta.dados().get(2);
 
-        if (frequencia > 90) {
-          //  JOptionPane.showMessageDialog(null, String.format("Frequencia da GPU muito alta %d", frequencia));
-        }
-        return  frequencia;
+
+        return temperatura;
+    }
+
+    public Integer gpuFrequencia() {
+
+        Integer frequencia = consulta.dados().get(3);
+
+        return frequencia;
+    }
+
+    public Integer redeLatencia() {
+
+        Integer latencia = consulta.dados().get(4);
+
+        return latencia;
+    }
+
+    public Integer redePacote() {
+
+        Integer pacote = consulta.dados().get(5);
+
+        return pacote;
     }
 }
