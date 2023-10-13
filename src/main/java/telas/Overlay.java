@@ -2,6 +2,7 @@ package telas;
 
 import entities.Imagens;
 import entities.Registros;
+import inovacao.Consulta;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,7 +29,12 @@ public class Overlay extends JFrame {
     private JLabel latencia;
     private JLabel pacote;
     private JPanel REDE;
+    private static String apelido;
+    private static boolean verificador = true;
 
+    public String getApelido() {
+        return apelido;
+    }
 
     public void ExibirValores() {
         Registros registros = new Registros();
@@ -196,17 +202,35 @@ public class Overlay extends JFrame {
                 navegar.setVisible(true);
             }
         });
-        fechar.addMouseListener(new MouseAdapter() {
+
+        help.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 dispose();
+                TelaChamado navegar = new TelaChamado();
+                navegar.setVisible(true);
+            }
+        });
+
+        fechar.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                System.exit(0);
             }
         });
     }
 
     public static void main(String[] args) {
-
+        Consulta consulta = new Consulta();
         new Overlay();
+
+        if (verificador) {
+            verificador = false;
+            apelido = JOptionPane.showInputDialog(null, "Digite o apelido dessa maquina");
+            consulta.pegarId();
+        }
     }
 }
+

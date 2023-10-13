@@ -1,8 +1,13 @@
 package inovacao;
 
+import telas.Overlay;
+import telas.TelaChamado;
+
+import javax.swing.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +17,7 @@ public class Consulta {
     public List<Integer> dados() {
 
         List<Integer> lista = new ArrayList<>();
-        String sql = "SELECT * FROM dados";
+        String sql = "SELECT * FROM tbMonitoramento";
 
         Connection conn = null;
         PreparedStatement pstm = null;
@@ -42,7 +47,7 @@ public class Consulta {
                 gpuTemperatura = rset.getInt("gpuTemp");
                 gpuFrequencia = rset.getInt("gpuFreq");
                 redeLatencia = rset.getInt("redeLatencia");
-                redePacote = rset.getInt("redePack");
+                redePacote = rset.getInt("redePacote");
             }
             if (cpuFrequencia.equals(0) && gpuFrequencia.equals(0)) {
                 cpuTemperatura = 0;
@@ -87,7 +92,7 @@ public class Consulta {
 
     public LocalDateTime tempo() {
 
-        String sql = "SELECT hora FROM dados";
+        String sql = "SELECT dataHora FROM tbMonitoramento";
         LocalDateTime hora = null;
 
         Connection conn = null;
@@ -106,7 +111,7 @@ public class Consulta {
 
             while (rset.next()) {
 
-                hora = (LocalDateTime) rset.getObject("hora");
+                hora = (LocalDateTime) rset.getObject("dataHora");
             }
 
             if (hora == null) {
@@ -137,9 +142,62 @@ public class Consulta {
         return hora;
     }
 
-    public static void main(String[] args) {
-        Consulta consulta = new Consulta();
+    private static boolean verificador = true;
+    public Integer pegarId() {
+        Overlay apelido = new Overlay();
+        apelido.dispose();
 
-        System.out.println(consulta.tempo());
+        String sql = String.format("SELECT idComputador FROM tbComputador WHERE apelidoComputador = '%s' AND fk_idEvento = (SELECT idEvento FROM tbEvento WHERE status = 'Em andamento');", apelido.getApelido());
+
+        Integer id = null; // Inicializado como null para indicar que não foi encontrado
+
+        Connection conn = null;
+        PreparedStatement pstm = null;
+        ResultSet rset = null;
+
+        try {
+            conn = Conexao.createConnectionToMySQL();
+            pstm = conn.prepareStatement(sql);
+            rset = pstm.executeQuery();
+
+            while (rset.next()) {
+                id =  rset.getInt("idComputador");
+            }
+
+            if (id == null) {
+                // Se id não foi encontrado, exibe a mensagem para o usuário
+                JOptionPane.showMessageDialog(null, "Apelido inexistente");
+                System.exit(0);
+            }else{
+
+                if (verificador) {
+                    JOptionPane.showMessageDialog(null, "Computador localizado");
+                    verificador = false;
+                }
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (rset != null) {
+                    rset.close();
+                }
+
+                if (pstm != null) {
+                    pstm.close();
+                }
+
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return id;
     }
+
 }
