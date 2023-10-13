@@ -147,7 +147,7 @@ public class Consulta {
         Overlay apelido = new Overlay();
         apelido.dispose();
 
-        String sql = String.format("SELECT idComputador FROM tbComputador WHERE apelidoComputador = '%s' AND fk_idEvento = (SELECT idEvento FROM tbEvento WHERE status = 'Em andamento');", apelido.getApelido());
+        String sql = String.format("SELECT idComputador FROM tbComputador WHERE apelidoComputador = '%s' AND fk_idEvento = (select fk_idEvento from tbComputador where apelidoComputador = '%s');", apelido.getApelido(),apelido.getApelido());
 
         Integer id = null; // Inicializado como null para indicar que não foi encontrado
 
