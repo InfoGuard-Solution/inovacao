@@ -16,6 +16,7 @@ O Overlay faz parte de um projeto que está sendo feito em grupo por alunos da f
 - Poderá fechar totalmente o overlay clicando no botão a direita (ou no X) <br>
 
 # Como usar
+- Adicione o mysql-connector como dependência do projeto;
 - É necessário criar um novo evento no sistema completo.
 - após isso basta passar o apelido que foi dado pelo sistema para os computadores. Esse apelido poderá ser encontrado na tela de relatórios. 
 ## Tela do projeto
