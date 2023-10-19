@@ -1,8 +1,10 @@
 package telas;
 
+import entities.DadosLooca;
 import entities.Imagens;
-import entities.Registros;
-import inovacao.Consulta;
+import entities.RegistrosOverlay;
+import registros.CrudChamado;
+import registros.InsertLooca;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,20 +39,20 @@ public class Overlay extends JFrame {
     }
 
     public void ExibirValores() {
-        Registros registros = new Registros();
+        RegistrosOverlay registrosOverlay = new RegistrosOverlay();
 
         new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                data.setText((String.valueOf(registros.data())));
+                data.setText((String.valueOf(registrosOverlay.data())));
 
                 estadoCpu();
                 estadoGpu();
 
                 //estado conexao ja valida os dois abaixo
                 estadoConexao();
-                latencia.setText(String.valueOf(registros.redeLatencia()));
-                pacote.setText(String.valueOf(registros.redePacote()));
+                latencia.setText(String.valueOf(registrosOverlay.redeLatencia()));
+                pacote.setText(String.valueOf(registrosOverlay.redePacote()));
 
             }
         }, 0, 1000);
@@ -58,10 +60,10 @@ public class Overlay extends JFrame {
 
     // validação para saber o estado de rede
     public void estadoConexao() {
-        Registros registros = new Registros();
+        RegistrosOverlay registrosOverlay = new RegistrosOverlay();
 
-        Integer lat = registros.redeLatencia();
-        Integer pac = registros.redePacote();
+        Integer lat = registrosOverlay.redeLatencia();
+        Integer pac = registrosOverlay.redePacote();
 
         if ((lat <= 20) && (pac <= 2)) {
             estado.setText("Excelente");
@@ -95,11 +97,11 @@ public class Overlay extends JFrame {
 
     // validação para estado da cpu
     public void estadoCpu() {
-        Registros registros = new Registros();
+        RegistrosOverlay registrosOverlay = new RegistrosOverlay();
 
         // pegando o valor do return e colocando em uma variavel
-        Integer temperatura = registros.cpuTemp();
-        Integer frequencia = registros.cpuFrequencia();
+        Integer temperatura = registrosOverlay.cpuTemp();
+        Integer frequencia = registrosOverlay.cpuFrequencia();
 
         // plotar valores na label
         cpuTemp.setText(String.valueOf(temperatura));
@@ -135,10 +137,10 @@ public class Overlay extends JFrame {
 
     // validação para estado da gpu
     public void estadoGpu() {
-        Registros registros = new Registros();
+        RegistrosOverlay registrosOverlay = new RegistrosOverlay();
 
-        Integer temperatura = registros.gpuTemp();
-        Integer frequencia = registros.gpuFrequencia();
+        Integer temperatura = registrosOverlay.gpuTemp();
+        Integer frequencia = registrosOverlay.gpuFrequencia();
 
         gpuTemp.setText(String.valueOf(temperatura));
         gpuFreq.setText(String.valueOf(frequencia));
@@ -185,7 +187,7 @@ public class Overlay extends JFrame {
         Opcao();
         ExibirValores();
 
-        // formatação do painel
+        // formatação do painelPC
         setUndecorated(true);
         setOpacity(0.7f);
         setBounds(5, 5, 240, 280);
@@ -223,13 +225,22 @@ public class Overlay extends JFrame {
     }
 
     public static void main(String[] args) {
-        Consulta consulta = new Consulta();
-        new Overlay();
+        CrudChamado consultaId = new CrudChamado();
 
         if (verificador) {
+            InsertLooca insert = new InsertLooca();
+            DadosLooca dados = new DadosLooca();
+
             verificador = false;
             apelido = JOptionPane.showInputDialog(null, "Digite o apelido dessa maquina");
-            consulta.pegarId();
+            consultaId.pegarIdPc();
+
+            new Timer().scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    insert.InsertDados(dados);
+                }
+            }, 0, 3000);
         }
     }
 }

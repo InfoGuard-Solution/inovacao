@@ -1,20 +1,17 @@
 package entities;
 
-import inovacao.Consulta;
+import registros.CrudOverlay;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAccessor;
 
-public class Registros {
+public class RegistrosOverlay {
 
-    Consulta consulta = new Consulta();
+    CrudOverlay consultaOverlay = new CrudOverlay();
 
     public String data() {
 
-
-        DateTimeFormatter formatadorDataHora = DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm:ss");
-
-        LocalDateTime hora = consulta.tempo();
+        DateTimeFormatter formatadorDataHora = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        LocalDateTime hora = LocalDateTime.now();
 
         return formatadorDataHora.format(hora);
     }
@@ -22,7 +19,7 @@ public class Registros {
     public Integer cpuTemp() {
 
         // primeiro valor da lista vindo do banco
-        Integer temperatura = consulta.dados().get(0);
+        Integer temperatura = consultaOverlay.dados().get(0);
 
         return temperatura;
     }
@@ -30,7 +27,7 @@ public class Registros {
     public Integer cpuFrequencia() {
 
         // pegamos o segundo valor da lista o qual se remete a frequencia
-        Integer frequencia = consulta.dados().get(1);
+        Integer frequencia = consultaOverlay.dados().get(1);
 
 
         return frequencia;
@@ -38,7 +35,11 @@ public class Registros {
 
     public Integer gpuTemp() {
 
-        Integer temperatura = consulta.dados().get(2);
+        Integer temperatura = consultaOverlay.dados().get(0) - 2;
+        if (temperatura < 0) {
+            temperatura = 1;
+        }
+
 
 
         return temperatura;
@@ -46,21 +47,21 @@ public class Registros {
 
     public Integer gpuFrequencia() {
 
-        Integer frequencia = consulta.dados().get(3);
+        Integer frequencia = consultaOverlay.dados().get(3);
 
         return frequencia;
     }
 
     public Integer redeLatencia() {
 
-        Integer latencia = consulta.dados().get(4);
+        Integer latencia = consultaOverlay.dados().get(4);
 
         return latencia;
     }
 
     public Integer redePacote() {
 
-        Integer pacote = consulta.dados().get(5);
+        Integer pacote = consultaOverlay.dados().get(5);
 
         return pacote;
     }

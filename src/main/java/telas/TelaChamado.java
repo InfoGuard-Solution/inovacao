@@ -1,9 +1,7 @@
 package telas;
 
 import entities.Imagens;
-import inovacao.Chamado;
-import inovacao.Conexao;
-import inovacao.Consulta;
+import registros.CrudChamado;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,8 +10,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.RoundRectangle2D;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.time.LocalDateTime;
 
 public class TelaChamado extends JFrame {
@@ -25,8 +21,6 @@ public class TelaChamado extends JFrame {
     private JLabel fechar;
     private JTextField problema;
     private JButton enviar;
-
-
 
 
     public void Opcao() {
@@ -87,8 +81,8 @@ public class TelaChamado extends JFrame {
             public void actionPerformed(ActionEvent e) {
 
                 Overlay apelido = new Overlay();
+                CrudChamado chamado = new CrudChamado();
                 apelido.dispose();
-                Consulta id = new Consulta();
 
                 LocalDateTime hora = LocalDateTime.now();
                 String problem = problema.getText();
@@ -98,40 +92,9 @@ public class TelaChamado extends JFrame {
                     return;
                 }
 
-                Chamado pc = new Chamado(apelido.getApelido(), hora, problem);
-
-                String sql = String.format("INSERT INTO tbOcorrencia (descricao, fk_idComputador, hora, status)\n" +
-                        "VALUES ('%s', %d, '%s', 'Pendente');", pc.getDescricao(), id.pegarId(), pc.getHora());
-
-                Connection conn = null;
-                PreparedStatement pstm = null;
-
-                try {
-                    conn = Conexao.createConnectionToMySQL();
-                    pstm = conn.prepareStatement(sql);
-
-                    int rset = pstm.executeUpdate();
-                    JOptionPane.showMessageDialog(null, "Chamado feito com sucesso !");
-
-                } catch (Exception ex) {
-                    // Tratamento de exceção genérica
-                    ex.printStackTrace();
-                } finally {
-                    try {
-                        if (pstm != null) {
-                            pstm.close();
-                        }
-
-                        if (conn != null) {
-                            conn.close();
-                        }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
+                chamado.InsertChamado(problem, String.valueOf(hora));
             }
         });
-
     }
 
     public static void main(String[] args) {
