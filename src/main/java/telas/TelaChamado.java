@@ -1,5 +1,6 @@
 package telas;
 
+import entities.Chamado;
 import entities.Imagens;
 import registros.CrudChamado;
 
@@ -79,26 +80,27 @@ public class TelaChamado extends JFrame {
         enviar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                Overlay apelido = new Overlay();
                 CrudChamado chamado = new CrudChamado();
-                apelido.dispose();
 
+                // Pega a data atual
                 LocalDateTime hora = LocalDateTime.now();
                 String problem = problema.getText();
 
+                // validação para caso o campo venha vazio
                 if (problem.isBlank()) {
                     JOptionPane.showMessageDialog(null, "Digite o que está acontecendo !!");
                     return;
                 }
 
-                chamado.InsertChamado(problem, String.valueOf(hora));
+                // criação de um objeto chamado
+                Chamado dados =new Chamado(problem, String.valueOf(hora));
+
+                //passa a informação para o insertChamdos localizado na CrudChamado
+                chamado.InsertChamado(dados);
+
+
             }
         });
-    }
-
-    public static void main(String[] args) {
-        new TelaChamado();
     }
 }
 

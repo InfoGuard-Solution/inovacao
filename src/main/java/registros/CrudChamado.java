@@ -1,6 +1,7 @@
 package registros;
 
 import conexao.Conexao;
+import entities.Chamado;
 import telas.Overlay;
 
 import javax.swing.*;
@@ -11,21 +12,71 @@ import java.sql.SQLException;
 
 public class CrudChamado {
 
-    public void InsertChamado(String descricao, String hora) {
 
-        String sql = String.format("INSERT INTO tbOcorrencia (descricao, fk_idComputador, hora, status)\n" +
-                "VALUES ('%s', %d, '%s', 'Pendente');", descricao, getIdPc(), hora);
+    // Verifica se já tem chamados encaminhados para determinado computador
+    public Integer procurarChamado() {
+
+        String sql = String.format("select idComputador from tbComputador where idComputador = %d AND status != \"bom\";", getIdPc());
+
+        Integer id = null;
+
         Connection conn = null;
         PreparedStatement pstm = null;
+        ResultSet rset = null;
 
         try {
             conn = Conexao.createConnectionToMySQL();
             pstm = conn.prepareStatement(sql);
+            rset = pstm.executeQuery();
 
-            int rset = pstm.executeUpdate();
-            StatusPc();
-            JOptionPane.showMessageDialog(null, "Chamado feito com sucesso !");
+            while (rset.next()) {
+                id = rset.getInt("idComputador");
+            }
 
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (rset != null) {
+                    rset.close();
+                }
+
+                if (pstm != null) {
+                    pstm.close();
+                }
+
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return id;
+    }
+
+
+    // Faz uma inserção na table chamados
+    public void InsertChamado(Chamado chamado) {
+
+        String sql = String.format("INSERT INTO tbOcorrencia (descricao, fk_idComputador, hora, status)\n" +
+                "VALUES ('%s', %d, '%s', 'Pendente');", chamado.getProblema(), getIdPc(), chamado.getHora());
+        Connection conn = null;
+        PreparedStatement pstm = null;
+
+        try {
+            if (procurarChamado() == null) {
+                conn = Conexao.createConnectionToMySQL();
+                pstm = conn.prepareStatement(sql);
+                StatusPc();
+
+                int rset = pstm.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Chamado feito com sucesso !");
+            }else {
+                JOptionPane.showMessageDialog(null, "Um chamado já foi encaminhado");
+            }
         } catch (Exception ex) {
             // Tratamento de exceção genérica
             ex.printStackTrace();
@@ -43,6 +94,8 @@ public class CrudChamado {
             }
         }
     }
+
+    // atualiza o status do pc quando um chamado é feito
 
     public void StatusPc() {
 
@@ -81,6 +134,8 @@ public class CrudChamado {
         return idPc;
     }
 
+
+    // Pega o id do pc a partir do apelido fornecido
     public Integer pegarIdPc() {
         Overlay apelido = new Overlay();
 
