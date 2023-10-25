@@ -35,11 +35,7 @@ public class RegistrosOverlay {
 
     public Integer gpuTemp() {
 
-        Integer temperatura = consultaOverlay.dados().get(0) - 2;
-        if (temperatura < 0) {
-            temperatura = 1;
-        }
-
+        Integer temperatura = consultaOverlay.dados().get(2);
 
 
         return temperatura;
@@ -59,10 +55,17 @@ public class RegistrosOverlay {
         return latencia;
     }
 
-    public Integer redePacote() {
+    public Integer ram() {
 
-        Integer pacote = consultaOverlay.dados().get(5);
+        Integer ram = consultaOverlay.dados().get(5);
 
-        return pacote;
+        return ram;
+    }
+
+    public Integer disco() {
+
+        Integer disco = consultaOverlay.dados().get(6);
+
+        return disco;
     }
 }

@@ -5,6 +5,9 @@ import com.github.britooo.looca.api.group.discos.DiscoGrupo;
 import com.github.britooo.looca.api.group.processador.Processador;
 import com.github.britooo.looca.api.group.temperatura.Temperatura;
 import entities.util.Converter;
+import oshi.SystemInfo;
+import oshi.hardware.HWDiskStore;
+import oshi.hardware.HardwareAbstractionLayer;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,19 +37,37 @@ public class DadosLooca {
         return porcentual;
     }
 
-    public Double tamanhoDisco() {
+    public Double atividadeDisco() throws InterruptedException {
+        // Obtém informações do sistema
+        SystemInfo systemInfo = new SystemInfo();
+        HardwareAbstractionLayer hardware = systemInfo.getHardware();
+        HWDiskStore disk = hardware.getDiskStores().get(0); // Pega o primeiro disco, você pode adaptar conforme necessário
 
-        return Converter.formater(disco.getTamanhoTotal());
-    }
+        // Registra o tempo inicial
+        long initialTime = System.currentTimeMillis();
+        long initialTransferTime = disk.getTransferTime();
 
-    public Double espacoDisco() {
+        Thread.sleep(5000); // Aguarda 5 segundos(Tirar essa parte quebra o resultado)
 
-        return Converter.formater(disc.getFreeSpace());
+        // Atualiza os atributos do disco para obter os dados mais recentes
+        disk.updateAttributes();
+
+        // Registra o tempo final
+        long finalTime = System.currentTimeMillis();
+        long finalTransferTime = disk.getTransferTime();
+
+        // Calcula a porcentagem de tempo de atividade
+        double activeTime = finalTransferTime - initialTransferTime;
+        double totalTime = finalTime - initialTime;
+
+        double activityPercentage = (activeTime / totalTime) * 100;
+
+        return activityPercentage;
     }
 
     public Integer latenciaRede() {
         //Informações da Rede
-        String host = "www.google.com"; // Você pode substituir pelo host desejado
+        String host = "www.google.com";
         Integer latencia = 0;
 
         try {

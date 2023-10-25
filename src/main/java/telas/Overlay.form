@@ -188,7 +188,7 @@
               <font name="Fira Code" size="14" style="1"/>
               <foreground color="-394241"/>
               <opaque value="false"/>
-              <text value="REDE"/>
+              <text value="EXTRA"/>
             </properties>
           </component>
           <grid id="6c198" binding="REDE" layout-manager="GridLayoutManager" row-count="3" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -216,10 +216,10 @@
                 </constraints>
                 <properties>
                   <foreground color="-394241"/>
-                  <text value="PACOTE"/>
+                  <text value="RAM(%)"/>
                 </properties>
               </component>
-              <component id="d9805" class="javax.swing.JLabel" binding="pacote">
+              <component id="d9805" class="javax.swing.JLabel" binding="ram">
                 <constraints>
                   <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -252,16 +252,16 @@
                 </constraints>
                 <properties>
                   <foreground color="-1379585"/>
-                  <text value="ESTADO :"/>
+                  <text value="DISCO(%)"/>
                 </properties>
               </component>
-              <component id="f9bd6" class="javax.swing.JLabel" binding="estado">
+              <component id="f9bd6" class="javax.swing.JLabel" binding="disco">
                 <constraints>
-                  <grid row="1" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <foreground color="-1379585"/>
-                  <text value="oi"/>
+                  <text value=""/>
                 </properties>
               </component>
             </children>

@@ -27,9 +27,9 @@ public class Overlay extends JFrame {
     public JLabel gpuFreq;
     public JLabel gpuTemp;
     private JLabel data;
-    private JLabel estado;
+    private JLabel disco;
     private JLabel latencia;
-    private JLabel pacote;
+    private JLabel ram;
     private JPanel REDE;
     private static String apelido;
     private static boolean verificador = true;
@@ -48,50 +48,74 @@ public class Overlay extends JFrame {
 
                 estadoCpu();
                 estadoGpu();
-
-                //estado conexao ja valida os dois abaixo
                 estadoConexao();
-                latencia.setText(String.valueOf(registrosOverlay.redeLatencia()));
-                pacote.setText(String.valueOf(registrosOverlay.redePacote()));
-
+                estadoRam();
+                estadoDisco();
             }
         }, 0, 1000);
     }
 
-    // validação para saber o estado de rede
+    // estado conexao
     public void estadoConexao() {
         RegistrosOverlay registrosOverlay = new RegistrosOverlay();
 
         Integer lat = registrosOverlay.redeLatencia();
-        Integer pac = registrosOverlay.redePacote();
 
-        if ((lat <= 20) && (pac <= 2)) {
-            estado.setText("Excelente");
-            estado.setForeground(Color.GREEN);
-        } else if ((lat <= 50) && (pac <= 10)) {
-            estado.setText("Mais ou menos");
-            estado.setForeground(Color.orange);
-        } else {
-            estado.setText("Ruim");
-            estado.setForeground(Color.RED);
-        }
+        latencia.setText(String.valueOf(lat));
 
         if (lat <= 20) {
             latencia.setForeground(Color.GREEN);
-        } else if ((lat <= 50) && (pac <= 10)) {
+        } else if ((lat <= 50)) {
             latencia.setForeground(Color.orange);
         } else {
             latencia.setForeground(Color.RED);
         }
+    }
 
-        if ((pac <= 2)) {
+    // validação para estado da ram
+    public void estadoRam() {
+        RegistrosOverlay registrosOverlay = new RegistrosOverlay();
 
-            pacote.setForeground(Color.GREEN);
-        } else if ((pac <= 10)) {
+        // pegando o valor do return e colocando em uma variavel
+        Integer ram = registrosOverlay.ram();
 
-            pacote.setForeground(Color.orange);
+        // plotar valores na label
+        this.ram.setText(String.valueOf(ram));
+
+        if (ram < 70) {
+            // Estou importando o jlabel para que possa ser trocado sua cor
+            this.ram.setForeground(Color.GREEN);
+
+        } else if (ram < 90) {
+
+            this.ram.setForeground(Color.ORANGE);
+
         } else {
-            pacote.setForeground(Color.RED);
+            this.ram.setForeground(Color.RED);
+        }
+    }
+
+
+    // validação para estado do disco
+    public void estadoDisco() {
+        RegistrosOverlay registrosOverlay = new RegistrosOverlay();
+
+        // pegando o valor do return e colocando em uma variavel
+        Integer disco = registrosOverlay.disco();
+
+        // plotar valores na label
+        this.disco.setText(String.valueOf(disco));
+
+        if (disco < 50) {
+            // Estou importando o jlabel para que possa ser trocado sua cor
+            this.disco.setForeground(Color.GREEN);
+
+        } else if (disco < 85) {
+
+            this.disco.setForeground(Color.ORANGE);
+
+        } else {
+            this.disco.setForeground(Color.RED);
         }
     }
 
@@ -238,9 +262,13 @@ public class Overlay extends JFrame {
             new Timer().scheduleAtFixedRate(new TimerTask() {
                 @Override
                 public void run() {
-                    insert.InsertDados(dados);
+                    try {
+                        insert.InsertDados(dados);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
-            }, 0, 3000);
+            }, 0, 6000);
         }
     }
 }

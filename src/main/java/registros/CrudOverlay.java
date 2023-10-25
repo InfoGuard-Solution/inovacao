@@ -36,7 +36,8 @@ public class CrudOverlay {
             Integer gpuTemperatura = 0;
             Integer gpuFrequencia = 0;
             Integer redeLatencia = 0;
-            Integer redePacote = 0;
+            Integer ram = 0;
+            Integer disco = 0;
 
             while (rset.next()) {
 
@@ -45,7 +46,8 @@ public class CrudOverlay {
                 gpuTemperatura = rset.getInt("gpuTemp");
                 gpuFrequencia = rset.getInt("gpuFreq");
                 redeLatencia = rset.getInt("redeLatencia");
-                redePacote = rset.getInt("redePacote");
+                ram = rset.getInt("ram");
+                disco = rset.getInt("disco");
             }
             if (cpuFrequencia.equals(0) && gpuFrequencia.equals(0)) {
                 cpuTemperatura = 0;
@@ -53,7 +55,8 @@ public class CrudOverlay {
                 gpuTemperatura = 0;
                 gpuFrequencia = 0;
                 redeLatencia = 0;
-                redePacote = 0;
+                ram = 0;
+                disco = 0;
 
             }
             lista.add(cpuTemperatura);
@@ -61,7 +64,8 @@ public class CrudOverlay {
             lista.add(gpuTemperatura);
             lista.add(gpuFrequencia);
             lista.add(redeLatencia);
-            lista.add(redePacote);
+            lista.add(ram);
+            lista.add(disco);
 
 
         } catch (Exception e) {
