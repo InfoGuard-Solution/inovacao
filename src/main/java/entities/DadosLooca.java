@@ -10,8 +10,10 @@ import oshi.hardware.HWDiskStore;
 import oshi.hardware.HardwareAbstractionLayer;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.Date;
 
 
 public class DadosLooca {
@@ -87,6 +89,15 @@ public class DadosLooca {
 
         return latencia;
     }
+
+    @Override
+    public String toString() {
+        return "DadosLooca{" +
+                "looca=" + looca +
+                ", disc=" + disc +
+                ", processador=" + processador +
+                ", temperatura=" + temperatura +
+                ", disco=" + disco +
+                '}';
+    }
 }
-
-

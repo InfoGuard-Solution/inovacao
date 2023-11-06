@@ -3,6 +3,9 @@ package telas;
 import entities.DadosLooca;
 import entities.Imagens;
 import entities.RegistrosOverlay;
+import entities.util.HardwareType;
+import entities.util.LogLevel;
+import entities.util.LogManager;
 import registros.CrudChamado;
 import registros.InsertLooca;
 
@@ -33,6 +36,7 @@ public class Overlay extends JFrame {
     private JPanel REDE;
     private static String apelido;
     private static boolean verificador = true;
+    private LogManager logManager = new LogManager();
 
     public String getApelido() {
         return apelido;
@@ -40,7 +44,6 @@ public class Overlay extends JFrame {
 
     public void ExibirValores() {
         RegistrosOverlay registrosOverlay = new RegistrosOverlay();
-
         new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
@@ -67,8 +70,10 @@ public class Overlay extends JFrame {
             latencia.setForeground(Color.GREEN);
         } else if ((lat <= 50)) {
             latencia.setForeground(Color.orange);
+            logManager.setLog("rede fra", LogLevel.WARNING, HardwareType.REDE, lat.toString());
         } else {
             latencia.setForeground(Color.RED);
+            logManager.setLog("limite de rede alcançado", LogLevel.ERROR, HardwareType.REDE, lat.toString());
         }
     }
 
@@ -89,9 +94,11 @@ public class Overlay extends JFrame {
         } else if (ram < 90) {
 
             this.ram.setForeground(Color.ORANGE);
+            logManager.setLog("uso de RAM fora do ideal", LogLevel.WARNING, HardwareType.RAM, ram.toString());
 
         } else {
             this.ram.setForeground(Color.RED);
+            logManager.setLog("uso de RAM muito acima do ideal", LogLevel.ERROR, HardwareType.RAM, ram.toString());
         }
     }
 
