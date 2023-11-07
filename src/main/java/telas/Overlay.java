@@ -70,10 +70,10 @@ public class Overlay extends JFrame {
             latencia.setForeground(Color.GREEN);
         } else if ((lat <= 50)) {
             latencia.setForeground(Color.orange);
-            logManager.setLog("rede fra", LogLevel.WARNING, HardwareType.REDE, lat.toString());
+            logManager.setLog("Latência da rede acima do ideal", LogLevel.AVISO, HardwareType.REDE, lat.toString());
         } else {
             latencia.setForeground(Color.RED);
-            logManager.setLog("limite de rede alcançado", LogLevel.ERROR, HardwareType.REDE, lat.toString());
+            logManager.setLog("limite de latência da rede alcançado", LogLevel.PERIGO, HardwareType.REDE, lat.toString());
         }
     }
 
@@ -94,11 +94,11 @@ public class Overlay extends JFrame {
         } else if (ram < 90) {
 
             this.ram.setForeground(Color.ORANGE);
-            logManager.setLog("uso de RAM fora do ideal", LogLevel.WARNING, HardwareType.RAM, ram.toString());
+            logManager.setLog("uso de RAM fora do ideal", LogLevel.AVISO, HardwareType.RAM, ram.toString());
 
         } else {
             this.ram.setForeground(Color.RED);
-            logManager.setLog("uso de RAM muito acima do ideal", LogLevel.ERROR, HardwareType.RAM, ram.toString());
+            logManager.setLog("uso de RAM muito acima do ideal", LogLevel.PERIGO, HardwareType.RAM, ram.toString());
         }
     }
 
@@ -120,9 +120,11 @@ public class Overlay extends JFrame {
         } else if (disco < 85) {
 
             this.disco.setForeground(Color.ORANGE);
+            logManager.setLog("uso do DISCO fora do ideal", LogLevel.AVISO, HardwareType.DISCO, disco.toString());
 
         } else {
             this.disco.setForeground(Color.RED);
+            logManager.setLog("uso do DISCO muito acima do ideal", LogLevel.PERIGO, HardwareType.DISCO, disco.toString());
         }
     }
 
@@ -146,10 +148,11 @@ public class Overlay extends JFrame {
         } else if (temperatura < 80) {
 
             cpuTemp.setForeground(Color.ORANGE);
+            logManager.setLog("Temperatura da CPU anormal", LogLevel.AVISO, HardwareType.CPU, temperatura.toString());
 
         } else {
             cpuTemp.setForeground(Color.RED);
-            //  JOptionPane.showMessageDialog(null, String.format("Temperatura da CPU muito alta %d", temperatura));
+            logManager.setLog("Temperatura da CPU muito acima do ideal", LogLevel.PERIGO, HardwareType.CPU, temperatura.toString());
         }
 
         if (frequencia < 30) {
@@ -160,9 +163,10 @@ public class Overlay extends JFrame {
         } else if (frequencia < 70) {
 
             cpuFreq.setForeground(Color.ORANGE);
-
+            logManager.setLog("Frequência da CPU anormal", LogLevel.AVISO, HardwareType.CPU, frequencia.toString());
         } else {
             cpuFreq.setForeground(Color.red);
+            logManager.setLog("Frequência da CPU muito acima do ideal", LogLevel.PERIGO, HardwareType.CPU, frequencia.toString());
         }
     }
 
@@ -183,9 +187,12 @@ public class Overlay extends JFrame {
         } else if (temperatura < 80) {
 
             gpuTemp.setForeground(Color.ORANGE);
+            logManager.setLog("Temperatura da GPU muito acima do ideal", LogLevel.PERIGO, HardwareType.GPU, temperatura.toString());
+
 
         } else {
             gpuTemp.setForeground(Color.RED);
+            logManager.setLog("Temperatura da GPU muito acima do ideal", LogLevel.PERIGO, HardwareType.GPU, temperatura.toString());
         }
 
         if (frequencia < 30) {
@@ -196,13 +203,26 @@ public class Overlay extends JFrame {
         } else if (frequencia < 70) {
 
             gpuFreq.setForeground(Color.ORANGE);
+            logManager.setLog("Frequência da CPU anormal", LogLevel.AVISO, HardwareType.CPU, frequencia.toString());
 
         } else {
             gpuFreq.setForeground(Color.red);
+            logManager.setLog("Frequência da GPU muito acima do ideal", LogLevel.PERIGO, HardwareType.GPU, frequencia.toString());
         }
     }
 
     public void Opcao() {
+        new Timer().scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    logManager.salvarLog(getApelido());
+                }catch (NullPointerException e){
+
+                }
+            }
+        }, 0, 6000);
+
         setBackground(Color.green);
         // adicionar imagens
         Imagens img = new Imagens();

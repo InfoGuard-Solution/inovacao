@@ -1,13 +1,14 @@
 package entities.util;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
 
 public class Log {
-    private LocalDateTime dateTime;
+
+    private static SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     private String mensagem;
     private String porcentagem;
-
     private LogLevel logLevel;
     private HardwareType hardwareType;
 
@@ -27,35 +28,29 @@ public class Log {
         this.hardwareType = hardwareType;
     }
 
-    public LocalDateTime getDateTime(){
-        return this.dateTime;
-    }
-    public void setDateTime(LocalDateTime dateTime){
-        this.dateTime = dateTime;
-    }
-
-    public String getMensagem(){
+    public String getMensagem() {
         return this.mensagem;
     }
-    public void setMensagem(String mensagem){
+
+    public void setMensagem(String mensagem) {
         this.mensagem = mensagem;
     }
 
-    public String getPorcentagem(){
+    public String getPorcentagem() {
         return this.porcentagem;
     }
-    public void setPorcentagem(String porcentagem){
+
+    public void setPorcentagem(String porcentagem) {
         this.porcentagem = porcentagem;
     }
 
     @Override
     public String toString() {
-        return dateTime+
+        return formato.format(new Date()) +
                 ", mensagem='" + mensagem + '\'' +
                 ", porcentagem='" + porcentagem + '\'' +
                 ", logLevel=" + logLevel +
-                ", hardwareType=" + hardwareType +
-                '}';
+                ", hardwareType=" + hardwareType;
     }
 }
 
