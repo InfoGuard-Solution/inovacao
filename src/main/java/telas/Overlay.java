@@ -36,7 +36,7 @@ public class Overlay extends JFrame {
     private JPanel REDE;
     private static String apelido;
     private static boolean verificador = true;
-    private LogManager logManager = new LogManager();
+    private final LogManager logManager = new LogManager();
 
     public String getApelido() {
         return apelido;

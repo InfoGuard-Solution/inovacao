@@ -93,12 +93,10 @@ public class TelaChamado extends JFrame {
                 }
 
                 // criação de um objeto chamado
-                Chamado dados =new Chamado(problem, String.valueOf(hora));
+                Chamado dados = new Chamado(problem, String.valueOf(hora));
 
                 //passa a informação para o insertChamdos localizado na CrudChamado
                 chamado.InsertChamado(dados);
-
-
             }
         });
     }

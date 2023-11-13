@@ -2,6 +2,8 @@ package registros;
 
 import conexao.Conexao;
 import entities.Chamado;
+import integracao.Slack;
+import org.json.JSONObject;
 import telas.Overlay;
 
 import javax.swing.*;
@@ -9,9 +11,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class CrudChamado {
-
 
     // Verifica se já tem chamados encaminhados para determinado computador
     public Integer procurarChamado() {
@@ -57,9 +60,11 @@ public class CrudChamado {
         return id;
     }
 
-
     // Faz uma inserção na table chamados
     public void InsertChamado(Chamado chamado) {
+
+        JSONObject json = new JSONObject();
+        String textoAlerta;
 
         String sql = String.format("INSERT INTO tbOcorrencia (descricao, fk_idComputador, hora, status)\n" +
                 "VALUES ('%s', %d, '%s', 'Pendente');", chamado.getProblema(), getIdPc(), chamado.getHora());
@@ -72,9 +77,22 @@ public class CrudChamado {
                 pstm = conn.prepareStatement(sql);
                 StatusPc();
 
+                SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                Date data = new Date();
+
+                textoAlerta = String.format("""
+                        Foi aberto um chamado!
+                        Descrição do problema: %s,
+                        Pc com problema: %s,
+                        Hora da abertura do chamado: %s
+                        """, chamado.getProblema(), new Overlay().getApelido(), formato.format(data));
+
+                json.put("text", textoAlerta);
+                Slack.sendMessage(json);
+
                 int rset = pstm.executeUpdate();
                 JOptionPane.showMessageDialog(null, "Chamado feito com sucesso !");
-            }else {
+            } else {
                 JOptionPane.showMessageDialog(null, "Um chamado já foi encaminhado");
             }
         } catch (Exception ex) {
@@ -194,5 +212,4 @@ public class CrudChamado {
         idPc = id;
         return id;
     }
-
 }
