@@ -24,6 +24,10 @@ public class TelaChamado extends JFrame {
     private JButton enviar;
 
 
+    public void limparCampo() {
+        problema.setText("");
+    }
+
     public void Opcao() {
         setBackground(Color.green);
         // adicionar imagens
@@ -97,6 +101,18 @@ public class TelaChamado extends JFrame {
 
                 //passa a informação para o insertChamdos localizado na CrudChamado
                 chamado.InsertChamado(dados);
+
+                // limpar campo
+                limparCampo();
+
+                // fechar tela
+                dispose();
+
+                // cria uma instancia da overlay
+                Overlay navegar = new Overlay();
+
+                // abre a overlay
+                navegar.setVisible(true);
             }
         });
     }

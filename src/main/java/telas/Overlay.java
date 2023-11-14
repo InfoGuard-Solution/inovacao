@@ -289,11 +289,7 @@ public class Overlay extends JFrame {
             new Timer().scheduleAtFixedRate(new TimerTask() {
                 @Override
                 public void run() {
-                    try {
-                        insert.InsertDados(dados);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
+                    insert.InsertDados(dados);
                 }
             }, 0, 6000);
         }

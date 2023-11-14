@@ -1,6 +1,7 @@
 package registros;
 
 import conexao.Conexao;
+import conexao.ConexaoServer;
 import telas.Overlay;
 
 import java.sql.Connection;
@@ -24,12 +25,15 @@ public class CrudOverlay {
 
 
         try {
-            conn = Conexao.createConnectionToMySQL();
+             /* Conexão my sql
+                conn = Conexao.createConnectionToMySQL(); */
+
+            // conexao sql server//
+            conn = ConexaoServer.createConnectionToSqlServer();
 
             pstm = conn.prepareStatement(sql);
 
             rset = pstm.executeQuery();
-
 
             Integer cpuTemperatura = 0;
             Integer cpuFrequencia = 0;

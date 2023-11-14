@@ -1,10 +1,12 @@
 package registros;
 
-import conexao.Conexao;
+import conexao.ConexaoServer;
 import entities.Chamado;
 import integracao.Slack;
 import org.json.JSONObject;
+import telas.Button;
 import telas.Overlay;
+import telas.TelaChamado;
 
 import javax.swing.*;
 import java.sql.Connection;
@@ -16,19 +18,25 @@ import java.util.Date;
 
 public class CrudChamado {
 
+    private static final Overlay apelido = new Overlay();
+
+
     // Verifica se já tem chamados encaminhados para determinado computador
     public Integer procurarChamado() {
 
-        String sql = String.format("select idComputador from tbComputador where idComputador = %d AND status != \"bom\";", getIdPc());
+        String sql = String.format("select idComputador from tbComputador where idComputador = %d AND status != \'bom\';", getIdPc());
 
         Integer id = null;
-
         Connection conn = null;
         PreparedStatement pstm = null;
         ResultSet rset = null;
 
         try {
-            conn = Conexao.createConnectionToMySQL();
+              /* Conexão my sql
+                conn = Conexao.createConnectionToMySQL(); */
+
+            // conexao sql server//
+            conn = ConexaoServer.createConnectionToSqlServer();
             pstm = conn.prepareStatement(sql);
             rset = pstm.executeQuery();
 
@@ -73,7 +81,12 @@ public class CrudChamado {
 
         try {
             if (procurarChamado() == null) {
-                conn = Conexao.createConnectionToMySQL();
+                  /* Conexão my sql
+                conn = Conexao.createConnectionToMySQL(); */
+
+                // conexao sql server//
+                conn = ConexaoServer.createConnectionToSqlServer();
+
                 pstm = conn.prepareStatement(sql);
                 StatusPc();
 
@@ -85,13 +98,14 @@ public class CrudChamado {
                         Descrição do problema: %s,
                         Pc com problema: %s,
                         Hora da abertura do chamado: %s
-                        """, chamado.getProblema(), new Overlay().getApelido(), formato.format(data));
+                        """, chamado.getProblema(), apelido.getApelido(), formato.format(data));
 
                 json.put("text", textoAlerta);
                 Slack.sendMessage(json);
 
                 int rset = pstm.executeUpdate();
                 JOptionPane.showMessageDialog(null, "Chamado feito com sucesso !");
+
             } else {
                 JOptionPane.showMessageDialog(null, "Um chamado já foi encaminhado");
             }
@@ -122,7 +136,12 @@ public class CrudChamado {
         PreparedStatement pstm = null;
 
         try {
-            conn = Conexao.createConnectionToMySQL();
+              /* Conexão my sql
+                conn = Conexao.createConnectionToMySQL(); */
+
+            // conexao sql server//
+            conn = ConexaoServer.createConnectionToSqlServer();
+
             pstm = conn.prepareStatement(sql);
 
             int rset = pstm.executeUpdate();
@@ -154,12 +173,11 @@ public class CrudChamado {
 
 
     // Pega o id do pc a partir do apelido fornecido
-    public Integer pegarIdPc() {
-        Overlay apelido = new Overlay();
+    public void pegarIdPc() {
 
         String sql = String.format("SELECT idComputador FROM tbComputador WHERE apelidoComputador = '%s' AND fk_idEvento = (select e.idEvento from tbEvento e\n" +
                 "inner join tbComputador c ON c.fk_idEvento = e.idEvento\n" +
-                "where c.apelidoComputador = '%s' AND e.status = \"Em andamento\");", apelido.getApelido(), apelido.getApelido());
+                "where c.apelidoComputador = '%s' AND e.status = 'Em andamento');", apelido.getApelido(), apelido.getApelido());
 
         Integer id = null; // Inicializado como null para indicar que não foi encontrado
 
@@ -168,7 +186,11 @@ public class CrudChamado {
         ResultSet rset = null;
 
         try {
-            conn = Conexao.createConnectionToMySQL();
+            /* Conexão my sql
+                conn = Conexao.createConnectionToMySQL(); */
+
+            // conexao sql server//
+            conn = ConexaoServer.createConnectionToSqlServer();
             pstm = conn.prepareStatement(sql);
             rset = pstm.executeQuery();
 
@@ -189,7 +211,7 @@ public class CrudChamado {
             }
 
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            System.out.println("Conexão falhou" + ex);
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
@@ -210,6 +232,5 @@ public class CrudChamado {
             }
         }
         idPc = id;
-        return id;
     }
 }
