@@ -1,6 +1,6 @@
 # overlay-de-dados
 Monitoramento de dados do hardware de um computador
-<br>Estado : em andamento
+<br>Estado : Finalizado
 
 ## sobre
 O Overlay faz parte de um projeto que está sendo feito em grupo por alunos da faculdade são paulo tech school, onde consiste no monitoramento de peças de hardware
@@ -19,5 +19,10 @@ O Overlay faz parte de um projeto que está sendo feito em grupo por alunos da f
 - Adicione o mysql-connector como dependência do projeto;
 - É necessário criar um novo evento no sistema completo.
 - após isso basta passar o apelido que foi dado pelo sistema para os computadores. Esse apelido poderá ser encontrado na tela de relatórios. 
+
+# Observação
+- O projeto está enviando dados para o banco de dados EC2 do projeto SuperVisiON. Caso você queira trocar o banco de dados, Ir para a classe conexão.
+Ao optar pelo uso do MySQL, acesse o pacote "Registros" e proceda descomentando ou apagando as linhas que contenham 'conn = Conexao.createConnectionToMySQL();', ao mesmo tempo em que comenta as linhas relacionadas ao SQL Server
+
 ## Tela do projeto
 ![image](https://github.com/winycios/overlay-de-dados/assets/79330086/5b9a60c5-e059-44a0-b3a3-701688090116)

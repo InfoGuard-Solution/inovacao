@@ -36,9 +36,9 @@ public class Overlay extends JFrame {
     private JPanel REDE;
     private static String apelido;
     private static boolean verificador = true;
-    private final LogManager logManager = new LogManager();
+    public static final LogManager logManager = new LogManager();
 
-    public String getApelido() {
+    public static String getApelido() {
         return apelido;
     }
 
@@ -212,16 +212,6 @@ public class Overlay extends JFrame {
     }
 
     public void Opcao() {
-        new Timer().scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                try {
-                    logManager.salvarLog(getApelido());
-                }catch (NullPointerException e){
-
-                }
-            }
-        }, 0, 6000);
 
         setBackground(Color.green);
         // adicionar imagens
@@ -289,7 +279,13 @@ public class Overlay extends JFrame {
             new Timer().scheduleAtFixedRate(new TimerTask() {
                 @Override
                 public void run() {
-                    insert.InsertDados(dados);
+                    try {
+                        logManager.salvarLog(getApelido());
+                        insert.InsertDados(dados);
+                    }catch (NullPointerException e){
+
+                    }
+
                 }
             }, 0, 6000);
         }
