@@ -1,16 +1,22 @@
 package registros;
 
 import conexao.Conexao;
+import conexao.ConexaoMySql;
 import conexao.ConexaoServer;
 import entities.DadosLooca;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.time.LocalDateTime;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class InsertLooca {
+
+    // conexão my sql
+    private static final Conexao connectMy = new ConexaoMySql();
+
+    // conexão sql server
+    private static final Conexao connectserver = new ConexaoServer();
 
     public void InsertDados(DadosLooca dados) {
         CrudChamado consultaId = new CrudChamado();
@@ -20,10 +26,10 @@ public class InsertLooca {
 
         try {
             /* Conexão my sql
-                conn = Conexao.createConnectionToMySQL(); */
+                conn = connectMy.criarConexao(); */
 
             // conexao sql server//
-            conn = ConexaoServer.createConnectionToSqlServer();
+            conn = connectserver.criarConexao();
 
             LocalDateTime hora = LocalDateTime.now();
             Integer num = ThreadLocalRandom.current().nextInt(4, 9);

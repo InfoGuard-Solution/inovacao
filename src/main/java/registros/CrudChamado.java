@@ -1,5 +1,7 @@
 package registros;
 
+import conexao.Conexao;
+import conexao.ConexaoMySql;
 import conexao.ConexaoServer;
 import entities.Chamado;
 import integracao.Slack;
@@ -18,6 +20,11 @@ import java.util.Date;
 
 public class CrudChamado {
 
+    // conexão my sql
+    private static final Conexao connectMy = new ConexaoMySql();
+
+    // conexão sql server
+    private static final Conexao connectserver = new ConexaoServer();
     private static final Overlay apelido = new Overlay();
 
 
@@ -33,10 +40,10 @@ public class CrudChamado {
 
         try {
               /* Conexão my sql
-                conn = Conexao.createConnectionToMySQL(); */
+                conn = connectMy.criarConexao(); */
 
             // conexao sql server//
-            conn = ConexaoServer.createConnectionToSqlServer();
+            conn = connectserver.criarConexao();
             pstm = conn.prepareStatement(sql);
             rset = pstm.executeQuery();
 
@@ -82,10 +89,10 @@ public class CrudChamado {
         try {
             if (procurarChamado() == null) {
                   /* Conexão my sql
-                conn = Conexao.createConnectionToMySQL(); */
+                conn = connectMy.criarConexao(); */
 
                 // conexao sql server//
-                conn = ConexaoServer.createConnectionToSqlServer();
+                conn = connectserver.criarConexao();
 
                 pstm = conn.prepareStatement(sql);
                 StatusPc();
@@ -136,11 +143,11 @@ public class CrudChamado {
         PreparedStatement pstm = null;
 
         try {
-              /* Conexão my sql
-                conn = Conexao.createConnectionToMySQL(); */
+             /* Conexão my sql
+                conn = connectMy.criarConexao(); */
 
             // conexao sql server//
-            conn = ConexaoServer.createConnectionToSqlServer();
+            conn = connectserver.criarConexao();
 
             pstm = conn.prepareStatement(sql);
 
@@ -186,11 +193,11 @@ public class CrudChamado {
         ResultSet rset = null;
 
         try {
-            /* Conexão my sql
-                conn = Conexao.createConnectionToMySQL(); */
+              /* Conexão my sql
+                conn = connectMy.criarConexao(); */
 
             // conexao sql server//
-            conn = ConexaoServer.createConnectionToSqlServer();
+            conn = connectserver.criarConexao();
             pstm = conn.prepareStatement(sql);
             rset = pstm.executeQuery();
 

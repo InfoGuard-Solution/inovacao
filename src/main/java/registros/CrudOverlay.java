@@ -1,8 +1,8 @@
 package registros;
 
 import conexao.Conexao;
+import conexao.ConexaoMySql;
 import conexao.ConexaoServer;
-import telas.Overlay;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,6 +11,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CrudOverlay {
+
+    // conexão my sql
+    private static final Conexao connectMy = new ConexaoMySql();
+
+    // conexão sql server
+    private static final Conexao connectserver = new ConexaoServer();
 
     public List<Integer> dados() {
 
@@ -25,11 +31,11 @@ public class CrudOverlay {
 
 
         try {
-             /* Conexão my sql
-                conn = Conexao.createConnectionToMySQL(); */
+                /* Conexão my sql
+                conn = connectMy.criarConexao(); */
 
             // conexao sql server//
-            conn = ConexaoServer.createConnectionToSqlServer();
+            conn = connectserver.criarConexao();
 
             pstm = conn.prepareStatement(sql);
 

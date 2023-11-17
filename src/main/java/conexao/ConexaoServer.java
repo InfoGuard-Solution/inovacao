@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 
-public class ConexaoServer {
+public class ConexaoServer extends Conexao {
 
     private static final String url = "jdbc:sqlserver://34.197.21.13;databaseName=SuperVisiON;trustServerCertificate=true;";
     private static final String usuario = "sa";
@@ -13,7 +13,8 @@ public class ConexaoServer {
 
     /* conexao com o banco de dados SQL SERVER*/
 
-    public static Connection createConnectionToSqlServer() throws SQLException {
+    @Override
+    public Connection criarConexao() throws ClassNotFoundException, SQLException {
 
         Connection conexao = DriverManager.getConnection(url, usuario, senha);
 
@@ -21,9 +22,10 @@ public class ConexaoServer {
     }
 
     public static void main(String[] args) throws Exception {
+        Conexao conexao = new ConexaoServer();
 
         //Recuperar uma conexão com o banco de dados
-        Connection con = createConnectionToSqlServer();
+        Connection con = conexao.criarConexao();
 
         //Testar se a conexão é nula
         if (con != null) {
